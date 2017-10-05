@@ -50,7 +50,7 @@ class MastermindNode():
         action_goal.turn_distance = theta
         action_goal.forward_distance = x
         
-        if not action_client.send_goal_and_wait(action_goal, rospy.Duration(50.0) == GoalStatus.SUCCEEDED:
+        if not self.action_client.send_goal_and_wait(action_goal, rospy.Duration(50.0) == GoalStatus.SUCCEEDED:
             rospy.loginfo('Call to turtlebot_actions server failed')
 
     def acquire_train_data(self):
