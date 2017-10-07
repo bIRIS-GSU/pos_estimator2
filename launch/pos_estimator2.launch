@@ -1,0 +1,8 @@
+<launch>
+    <node pkg="pos_estimator2" type="mastermind_node.py" name="mastermind" ns="pos_estimator2" />
+    
+    <param name="results_dir" type="string" value="~/catkin_ws/src/pos_estimator2/results/" />
+
+
+
+<\launch>
