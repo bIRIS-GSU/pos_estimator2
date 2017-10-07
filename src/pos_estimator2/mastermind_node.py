@@ -36,7 +36,30 @@ class MastermindNode():
         self.rospy.wait_for_service('correct_errors')
         self.rospy.wait_for_service('train_cnns')
         
-        # That concludes setup, now we need to kick things off
+        # That concludes setup
+        
+        # Main loop of the program
+        
+        while 1:
+            # Goto a position
+            self.goto_goal(x, theta)
+            # Now we're at that position
+            # If we're at the origin, train, then check and correct errors
+            if AT_ORIGIN():
+                # First train the CNNs so we can get an estimated position
+                self.train_cnns()
+                # Get our estimated position
+                cur_pos = self.get_current_position()
+                # Correct errors based on that position
+                self.correct_errors(cur_pos)
+                
+            # If we're not at the origin, just acquire data
+            else:
+                # We need to pass it a Pose2D based on our movement pattern or odometry
+                self.acquire_train_data(current_position)
+                
+            # Then repeat the process
+                
         
         
 
@@ -44,7 +67,7 @@ class MastermindNode():
         """  Instructs the robot to move to a new, relative position 
         
         Note: The turtlebot_actions process to move is to turn to meet
-            theta radians, then move foward x meters."""
+            theta radians, then move forward x meters. """
         
         action_goal = TurtlebotMoveGoal()
         action_goal.turn_distance = theta
@@ -53,6 +76,7 @@ class MastermindNode():
         if not self.action_client.send_goal_and_wait(action_goal, rospy.Duration(50.0) == GoalStatus.SUCCEEDED:
             rospy.loginfo('Call to turtlebot_actions server failed')
 
+
     def acquire_train_data(self):
         """ Calls the service to acquire training data from the node responsible for that task"""
         try:
@@ -60,7 +84,6 @@ class MastermindNode():
         except rospy.ServiceException as exc:
             rospy.loginfo('Service \'acquire_train_data\' could not process request: ' + str(exc))
             
-        # After acquiring training data for this positional node, we move to the next position
         
 
     def get_current_position(self):
@@ -70,8 +93,6 @@ class MastermindNode():
         except rospy.ServiceException as exc:
             rospy.loginfo('Service \'get_current_position\' could not process request: ' + str(exc))
             
-        # Everytime the mastermind asks for current position, we follow by correcting errors
-        correct_errors()
 
     def correct_errors(self):
         """ Calls the service to distribute error corrections over already-gathered data """
@@ -80,8 +101,6 @@ class MastermindNode():
         except rospy.ServiceException as exc:
             rospy.loginfo('Service \'correct_errors\' could not process request: ' + str(exc))
             
-        # After correcting errors, we always retrain the system
-        train_cnns()
 
     def train_cnns(self):
         """ Calls the service to train/retrain the CNNs """ 
@@ -90,7 +109,6 @@ class MastermindNode():
         except rospy.ServiceException as exc:
             rospy.loginfo('Service \'train_cnns\' could not process request: ' + str(exc))
             
-        # After training/retraining the CNNs, we resume with movement again
 
 
 if __name__ == "__main__":

@@ -24,6 +24,19 @@ class PosEvaluation():
     def get_current_position():
     
         # Get odometry-based position
+        odom_pos = get_odom_pos
+        
+        # If the RGB and Depth CNN exist, evaluate position from them as well
+        
+        # Combine the three estimated positions into our best guess
+        
+        # Return that position
+        cur_pos = Pose2D()
+        # Fill current_position much like odom_position was filled in get_odom_pos()
+        return cur_pos
+        
+    def get_odom_pos()
+        # Get odometry-based position
         odom = rospy.wait_for_message(rospy.get_param('odometry_topic', Odometry)
         # Calculate euler angles from the odometry quaternion
         euler = tf.transformations.euler_from_quaternion(odom.pose.quaternion)
@@ -33,14 +46,7 @@ class PosEvaluation():
         odom_position.y = odom.pose.pose.position.y
         odom_position.theta = euler[2]
         
-        # If the RGB and Depth CNN exist, evaluate position from them as well
-        
-        # Combine the three estimated positions into our best guess
-        
-        # Return that position
-        current_position = CurrentPosition()
-        # Fill current_position much like odom_position was filled earlier
-        return current_position
+        return odom_position
 
 
 if __name__ == "__main__":

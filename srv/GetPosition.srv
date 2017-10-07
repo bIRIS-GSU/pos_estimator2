@@ -1,4 +1,5 @@
 # Request
+Bool just_odom=false
 ---
 # Response
 geometry_msgs/Pose2D position

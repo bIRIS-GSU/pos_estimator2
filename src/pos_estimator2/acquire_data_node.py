@@ -41,7 +41,7 @@ class AcquireDataNode():
             # Acquire 50 data points
             for j in range(50):
                 # Acquire the RGB and Depth Images
-                rgb_image = rospy.wait_for_message(rospy.get_param('kinect_rgb_topic'),Image)
+                rgb_image = rospy.wait_for_message(rospy.get_param('kinect_rgb_topic'), Image)
                 depth_image = rospy.wait_for_message(rospy.get_param('kinect_depth_topic'), Image)
                 
                 # Combine them in our custom message
@@ -54,6 +54,8 @@ class AcquireDataNode():
                 # End for j
             # Spin 90 deg
             spin_turtlebot()
+			
+		return
         
     def spin_turtlebot(self):
         # Spin 90 degrees between acquiring data

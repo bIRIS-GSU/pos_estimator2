@@ -16,13 +16,11 @@ class ErrorCorrection():
         self.srv_get_position = rospy.ServiceProxy('get_current_position', EstimatePosition)
         self.rospy.wait_for_service('train_cnns')
         self.rospy.wait_for_service('get_current_position')
-        self.srv_correct_errors = rospy.Service('correct_errors', pos_estimator2.srv.CorrectErrors, correct_errors)
+        self.srv_correct_errors = rospy.Service('correct_errors', CorrectErrors, correct_errors)
         
     def correct_errors(pos):
         """ Calculates errors and renames folders based on the given current position """
         
-        # First get the current position
-        pos = self.srv_get_position()
         # Calculate error (if reference is (0,0,0) then error should just be the value of our current position
         # Except for theta, which could be different (by a multiple of 90 deg)
         

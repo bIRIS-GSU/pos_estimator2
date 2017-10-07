@@ -5,7 +5,16 @@
 
 
 def store_data_node():
+    """ Stores training data in a directory somewhere """
 
+    def __init__(self):
+        
+        rospy.init_node('store_data_node')
+
+        # Setup service
+        self.srv_store_data = rospy.Service('store_train_data', StoreTrainData, self.store_train_data)
+        
+    def store_train_data(self):
 
 
 if __name__ == "__main__":
