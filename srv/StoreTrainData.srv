@@ -1,4 +1,5 @@
 # Request
+RGBDepthImage combined_image
 geometry_msgs/Pose2D position
 ---
 # Response

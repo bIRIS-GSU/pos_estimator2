@@ -20,6 +20,8 @@ class AcquireDataNode():
 
     def __init__(self):
     
+        ODOM_ONLY = True
+    
         # Initialize the ROS node
         rospy.init_node('acquire_data_node')
         
@@ -28,16 +30,20 @@ class AcquireDataNode():
         self.action_client.wait_for_server() # Wait for the server to come up
         
         # Setup services
+        self.srv_get_position = rospy.ServiceProxy('get_current_position', GetPosition)
         self.srv_store_train_data = rospy.ServiceProxy('store_train_data', StoreTrainData)
         self.srv_acquire_data = rospy.Service('acquire_data', pos_estimator2.srv.AcquireData, acquire_data)
         
         rospy.loginfo('Waiting for necessary services to start')
+        rospy.wait_for_service('get_current_position')
         rospy.wait_for_service('store_train_data')
         
     def acquire_data(self):
         """ When triggered, acquires 50 data points, rotates 90 deg, and repeats until 360 deg of rotation """
         
         for i in range(4):
+            # Grab current position for storage purposes
+            cur_pos = self.srv_get_position(ODOM_ONLY)
             # Acquire 50 data points
             for j in range(50):
                 # Acquire the RGB and Depth Images
@@ -50,7 +56,7 @@ class AcquireDataNode():
                 combined_image.depth = depth_image
                 
                 # Send the message off to the store_train_data node
-                self.srv_store_train_data(combined_image)
+                self.srv_store_train_data(combined_image, cur_pos)
                 # End for j
             # Spin 90 deg
             spin_turtlebot()

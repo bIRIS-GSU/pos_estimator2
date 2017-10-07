@@ -55,8 +55,7 @@ class MastermindNode():
                 
             # If we're not at the origin, just acquire data
             else:
-                # We need to pass it a Pose2D based on our movement pattern or odometry
-                self.acquire_train_data(current_position)
+                self.acquire_train_data()
                 
             # Then repeat the process
                 
