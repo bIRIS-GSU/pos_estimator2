@@ -2,6 +2,8 @@
 
     <!-- First we set some parameters (variables shared by these nodes) -->
     <param name="results_dir" type="string" value="$(find pos_estimator2)/training_data/" />
+    <param name="kinect_rgb_topic" type="string" value="kinect2/sd/image_color" />
+    <param name="kinect_depth_topic" type="string" value="kinect2/sd/image_depth" />
     
     <!-- Bring up our external nodes: The Turtlebot action server, the Kobuki base, and the Kinect -->
     <include file="$(find kobuki_node)/launch/minimal.launch" />
