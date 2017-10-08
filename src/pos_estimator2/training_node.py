@@ -3,12 +3,14 @@
 # This node initiates the training of the RGB and Depth CNNs
 
 
-def training_node():
+class TrainingNode():
+    """ This class contains the operation of training the CNNs """
+    def __init__(self):
 
 
 
 if __name__ == "__main__":
     try:
-	    training_node()
+	    TrainingNode()
 	except rospy.ROSInterruptException:
 	    pass
