@@ -1,7 +1,19 @@
 <launch>
-    <node pkg="pos_estimator2" type="mastermind_node.py" name="mastermind" ns="pos_estimator2" />
+
+    <!-- First we set some parameters (variables shared by these nodes) -->
+    <param name="results_dir" type="string" value="$(find pos_estimator2)/training_data/" />
     
-    <param name="results_dir" type="string" value="~/catkin_ws/src/pos_estimator2/results/" />
+    <!-- Bring up our external nodes: The Turtlebot action server, the Kobuki base, and the Kinect -->
+    <include file="$(find kobuki_node)/launch/minimal.launch" />
+    <node pkg="turtlebot_actions" type="turtlebot_move_action_server" name="turtlebot_move" ns="pos_estimator2" />
+    <include file="$(find kinect2bridge)/launch/kinect2bridge.launch" />
+    
+    <!-- Bring up our own nodes, under the namespace "pos_estimator2" -->
+    <node pkg="pos_estimator2" type="mastermind_node.py" name="mastermind" ns="pos_estimator2" />
+    <node pkg="pos_estimator2" type="acquire_data_node.py" name="acquire_data" ns="pos_estimator2" />
+    <node pkg="pos_estimator2" type="store_data_node.py" name="store_data" ns="pos_estimator2" />
+    <node pkg="pos_estimator2" type="pos_evaluation_node.py" name="pos_evaluator" ns="pos_estimator2" />
+    <node pkg="pos_estimator2" type="error_correction_node.py" name="correct_errors" ns="pos_estimator2" />
 
 
 

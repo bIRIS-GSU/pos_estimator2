@@ -21,9 +21,9 @@ def store_data_node():
         
         rospy.init_node('store_data_node')
         
-        self.results_dir = rospy.get_param('results_dir')
-        if not self.results_dir.endswith('/'):
-            rospy.signal_shutdown('Parameter \'results_dir\' should end with character \/')
+        self.results_dir = rospy.get_param('data_dir')
+        if not self.data_dir.endswith('/'):
+            rospy.signal_shutdown('Parameter \'data_dir\' should end with character \/')
         
         bridge = CvBridge()
 
@@ -42,8 +42,8 @@ def store_data_node():
             # Save the files
             pos = msg.position
             pos_dir_name = str(pos.x) + '-' + str(pos.y) + '-' + str(pos.theta) 
-            rgb_path = self.results_dir + pos_dir_name + '/rgb/'
-            depth_path = self.results_dir + pos_dir_name + '/depth/'
+            rgb_path = self.data_dir + pos_dir_name + '/rgb/'
+            depth_path = self.data_dir + pos_dir_name + '/depth/'
             
             cv2.imwrite(rgb_path + rospy.Time.to_nsec() + '.jpeg', cv2_rgb)
             cv2.imwrite(depth_path + rospy.Time.to_nsec() + '.jpeg', cv2_depth)
