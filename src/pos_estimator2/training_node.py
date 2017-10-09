@@ -6,6 +6,7 @@
 class TrainingNode():
     """ This class contains the operation of training the CNNs """
     def __init__(self):
+    
 
 
 

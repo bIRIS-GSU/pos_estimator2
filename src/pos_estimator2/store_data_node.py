@@ -15,7 +15,8 @@ import StoreTrainData, RGBDepthImage
 
 
 def store_data_node():
-    """ Stores training data in a directory somewhere """
+    """ Stores training data in the directory specified with the parameter 'data_dir' """
+    
 
     def __init__(self):
         
@@ -30,8 +31,16 @@ def store_data_node():
         # Set up service
         self.srv_store_data = rospy.Service('store_train_data', StoreTrainData, self.store_train_data)
         
-    def store_train_data(self, msg):
-        """ Stores msg.combined_image.rgb and msg.combined_image.depth in a folder named from msg.position """
+    def store_train_data(self, data):
+        """ Stores data.combined_image.rgb and data.combined_image.depth in a folder named from data.position
+        
+        Args:
+          data: RGBDepthImage
+          pos: geometry_msgs/Pose2D
+          
+        Returns:
+          None
+        """
         
         try:
             cv2_rgb = bridge.imgmsg_to_cv2(msg.combined_image.rgb, "bgr8")
@@ -40,7 +49,7 @@ def store_data_node():
             rospy.loginfo(e)
         else:
             # Save the files
-            pos = msg.position
+            pos = data.position
             pos_dir_name = str(pos.x) + '-' + str(pos.y) + '-' + str(pos.theta) 
             rgb_path = self.data_dir + pos_dir_name + '/rgb/'
             depth_path = self.data_dir + pos_dir_name + '/depth/'

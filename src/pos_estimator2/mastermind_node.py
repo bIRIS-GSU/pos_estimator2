@@ -15,6 +15,7 @@ import actionlib
 
 
 class MastermindNode():
+    """ ROS node that coordinates the operation of the Position Estimator """
 
     def __init__(self):
         # initialize ROS node
@@ -39,7 +40,6 @@ class MastermindNode():
         # That concludes setup
         
         # Main loop of the program
-        
         while 1:
             # Goto a position
             self.goto_goal(x, theta)
@@ -66,7 +66,15 @@ class MastermindNode():
         """  Instructs the robot to move to a new, relative position 
         
         Note: The turtlebot_actions process to move is to turn to meet
-            theta radians, then move forward x meters. """
+            theta radians, then move forward x meters. 
+            
+        Args:
+          x: Distance to move fowards (meters)
+          theta: degrees to rotate
+          
+        Returns:
+          None
+        """
         
         action_goal = TurtlebotMoveGoal()
         action_goal.turn_distance = theta
@@ -77,7 +85,15 @@ class MastermindNode():
 
 
     def acquire_train_data(self):
-        """ Calls the service to acquire training data from the node responsible for that task"""
+        """ Calls ROS service 'acquire_train_data' 
+        
+        Args:
+          None
+        
+        Returns:
+          None
+        """
+        
         try:
             resp = self.srv_acquire_train_data()
         except rospy.ServiceException as exc:
@@ -86,23 +102,48 @@ class MastermindNode():
         
 
     def get_current_position(self):
-        """ Calls the service to get the current position """
+        """ Calls ROS service 'get_current_position'
+
+        Args:
+          None
+          
+        Returns:
+          geometry_msgs/Pose2D for current position
+        """
         try:
             resp = self.srv_get_current_position()
         except rospy.ServiceException as exc:
             rospy.loginfo('Service \'get_current_position\' could not process request: ' + str(exc))
             
+        return resp
+            
 
-    def correct_errors(self):
-        """ Calls the service to distribute error corrections over already-gathered data """
+    def correct_errors(self, cur_pos):
+        """ Calls Ros service 'correct_errors'
+
+        Args:
+          cur_pos: Current position, in the form of a geometry_msgs/Pose2D
+          
+        Returns:
+          None
+        """
+        
         try:
-            resp = self.srv_correct_errors()
+            resp = self.srv_correct_errors(cur_pos)
         except rospy.ServiceException as exc:
             rospy.loginfo('Service \'correct_errors\' could not process request: ' + str(exc))
             
 
     def train_cnns(self):
-        """ Calls the service to train/retrain the CNNs """ 
+        """ Calls ROS service 'train_cnns'
+        
+        Args:
+          None
+          
+        Returns:
+          None
+        """ 
+        
         try:
             resp = self.srv_train_cnns()
         except rospy.ServiceException as exc:

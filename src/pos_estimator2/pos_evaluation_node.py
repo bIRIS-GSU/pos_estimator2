@@ -22,6 +22,14 @@ class PosEvaluation():
     
     
     def get_current_position():
+        """ ROS service that evaluates the current position of the robot 
+        
+        Args:
+          None
+          
+        Returns:
+          geometry_msgs/Pose2D current_position
+        """
     
         # Get odometry-based position
         odom_pos = get_odom_pos
@@ -36,6 +44,17 @@ class PosEvaluation():
         return cur_pos
         
     def get_odom_pos()
+        """ Gets current position based on odometry 
+        
+        Args:
+          None
+          
+        Returns:
+          geometry_msgs/Pose2D current position
+        """
+        
+        
+        # Note: Odometry also carries a covariance (uncertainty) matrix... could use this for confidence for odom measurements.
         # Get odometry-based position
         odom = rospy.wait_for_message(rospy.get_param('odometry_topic', Odometry)
         # Calculate euler angles from the odometry quaternion
@@ -47,6 +66,31 @@ class PosEvaluation():
         odom_position.theta = euler[2]
         
         return odom_position
+        
+    def get_rgb_pos()
+        """ Gets current position based on RGB CNN
+        Args:
+          None
+          
+        Returns:
+          geometry_msgs/Pose2D current position
+        """
+
+        return Pose2D()
+        
+    def get_depth_pos()
+        """ Gets current position based on Depth CNN
+        
+        Args:
+          None
+          
+        Returns:
+          geometry_msgs/Pose2D current position
+        """
+        return Pose2D()
+       
+    
+        
 
 
 if __name__ == "__main__":

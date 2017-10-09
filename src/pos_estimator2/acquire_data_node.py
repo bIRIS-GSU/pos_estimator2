@@ -17,6 +17,8 @@ from sensor_msgs.msg import Image
 
 
 class AcquireDataNode():
+    """ Acquires 50 data points per rotation at the current position. Rotates and acquires data until back at initial heading.
+    Rotations are, currently, 90 deg. """
 
     def __init__(self):
     
@@ -39,7 +41,12 @@ class AcquireDataNode():
         rospy.wait_for_service('store_train_data')
         
     def acquire_data(self):
-        """ When triggered, acquires 50 data points, rotates 90 deg, and repeats until 360 deg of rotation """
+        """ When triggered, acquires 50 data points, rotates 90 deg, and repeats until 360 deg of rotation 
+        
+        Args: None
+        
+        Returns: None
+        """
         
         for i in range(4):
             # Grab current position for storage purposes
@@ -64,7 +71,13 @@ class AcquireDataNode():
 		return
         
     def spin_turtlebot(self):
-        # Spin 90 degrees between acquiring data
+        """ Spins the Turtlebot 90 degrees 
+        FUTURE: Add argument or ROS param to specify degrees to rotate
+        
+        Args: None
+        
+        Returns: None
+        """
         action_goal = TurtlebotMoveGoal()
         action_goal.turn_distance = math.pi/2
         action_goal.forward_distance = 0
