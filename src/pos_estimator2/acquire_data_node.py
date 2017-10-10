@@ -34,7 +34,7 @@ class AcquireDataNode():
         # Setup services
         self.srv_get_position = rospy.ServiceProxy('get_current_position', GetPosition)
         self.srv_store_train_data = rospy.ServiceProxy('store_train_data', StoreTrainData)
-        self.srv_acquire_data = rospy.Service('acquire_data', pos_estimator2.srv.AcquireData, acquire_data)
+        self.srv_acquire_data = rospy.Service('acquire_data', AcquireData, acquire_data)
         
         rospy.loginfo('Waiting for necessary services to start')
         rospy.wait_for_service('get_current_position')

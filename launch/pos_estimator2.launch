@@ -5,6 +5,20 @@
     <param name="kinect_rgb_topic" type="string" value="kinect2/sd/image_color" />
     <param name="kinect_depth_topic" type="string" value="kinect2/sd/image_depth" />
     
+    <!-- Coordinates for movement -->
+    
+    <!-- First coordinate -->
+    <param name="coords/1/x" type="double" value="0.0" />
+    <param name="coords/1/y" type="double" value="0.5" />
+    
+    <!-- Second coordinate -->
+    <param name="coords/2/x" type="double" value="0.5" />
+    <param name="coords/2/y" type="double" value="0.5" />
+    
+    <!-- Third coordinate -->
+    <param name="coords/3/x" type="double" value="0.5" />
+    <param name="coords/3/y" type="double" value="0.0" />
+    
     <!-- Bring up our external nodes: The Turtlebot action server, the Kobuki base, and the Kinect -->
     <include file="$(find kobuki_node)/launch/minimal.launch" />
     <node pkg="turtlebot_actions" type="turtlebot_move_action_server" name="turtlebot_move" ns="pos_estimator2" />

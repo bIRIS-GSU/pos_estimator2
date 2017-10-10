@@ -37,12 +37,17 @@ class MastermindNode():
         self.rospy.wait_for_service('correct_errors')
         self.rospy.wait_for_service('train_cnns')
         
+        # Get coordinates for movement
+        self.coords = rospy.get_param('coords')
+        self.num_pts = len(coords)
+        self.cur_node = 0 # Start at origin
+        
         # That concludes setup
         
         # Main loop of the program
         while 1:
             # Goto a position
-            self.goto_goal(x, theta)
+            self.goto_next()
             # Now we're at that position
             # If we're at the origin, train, then check and correct errors
             if AT_ORIGIN():
@@ -62,19 +67,20 @@ class MastermindNode():
         
         
 
-    def goto_goal(self, x, theta):
+    def goto_next(self):
         """  Instructs the robot to move to a new, relative position 
         
         Note: The turtlebot_actions process to move is to turn to meet
             theta radians, then move forward x meters. 
             
         Args:
-          x: Distance to move fowards (meters)
-          theta: degrees to rotate
+          None
           
         Returns:
           None
         """
+        
+        self.cur_node += 1
         
         action_goal = TurtlebotMoveGoal()
         action_goal.turn_distance = theta
