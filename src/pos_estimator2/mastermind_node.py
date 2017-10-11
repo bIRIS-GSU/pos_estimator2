@@ -8,8 +8,7 @@ roslib.load_manifest('turtlebot_actions')
 
 import rospy
 
-from turtlebot_actions.msg import *
-from actionlib_msgs.msg import *
+
 
 import actionlib
 
@@ -21,10 +20,9 @@ class MastermindNode():
         # initialize ROS node
         rospy.init_node('mastermind_node')
         
-        # Initialize turtlebot_move action client
-        self.action_client = action_client = actionlib.SimpleActionClient('turtlebot_move', TurtlebotMoveAction)
-        self.action_client.wait_for_server() # Wait for the server to come up
         
+        
+        self.srv_move_next = rospy.ServiceProxy('move_next', MoveNext)
         self.srv_acquire_train_data = rospy.ServiceProxy('acquire_train_data', AcquireTrainData)
         self.srv_get_current_position = rospy.ServiceProxy('get_current_position', GetPosition)
         self.srv_correct_errors = rospy.ServiceProxy('correct_errors', CorrectErrors)
