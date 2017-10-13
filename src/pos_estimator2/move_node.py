@@ -39,6 +39,15 @@ class MoveNode():
         self.srv_get_nodes = rospy.Service('get_nodes', GetNodes, get_nodes)
         
     def next_move():
+        """ ROS Service to execute move to next node
+        
+        Args:
+          None
+          
+        Returns:
+          None
+        """
+        
         # Set up empty goal
         action_goal = TurtlebotMoveGoal()
         
@@ -49,6 +58,7 @@ class MoveNode():
         # Calculate distance to move forward_distance
         dist = get_dist_to_move()
         
+        # Set those parameters as the goal
         action_goal.turn_distance = rads
         action_goal.forward_distance = dist
         
