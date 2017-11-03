@@ -1,5 +1,5 @@
 # Request
-Bool just_odom=false
+std_msgs/Bool just_odom
 ---
 # Response
 geometry_msgs/Pose2D position

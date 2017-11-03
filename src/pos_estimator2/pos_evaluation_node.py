@@ -5,8 +5,10 @@
 
 import rospy
 
-from sensor_msgs import Odometry, Image
-from geometry_msgs import Pose2D
+import tf
+from sensor_msgs.msg import Odometry
+from geometry_msgs.msg import Pose2D
+from pos_estimator2 import
 
 
 
@@ -21,7 +23,8 @@ class PosEvaluation():
         self.srv_evaluate_position = rospy.Service('get_current_position', pos_estimator2.srv.EstimatePosition, get_current_position)
     
     
-    def get_current_position():
+    @property
+    def get_current_position(self):
         """ ROS service that evaluates the current position of the robot 
         
         Args:
@@ -32,7 +35,7 @@ class PosEvaluation():
         """
     
         # Get odometry-based position
-        odom_pos = get_odom_pos
+        odom_pos = self.get_odom_pos()
         
         # If the RGB and Depth CNN exist, evaluate position from them as well
         
@@ -43,7 +46,7 @@ class PosEvaluation():
         # Fill current_position much like odom_position was filled in get_odom_pos()
         return cur_pos
         
-    def get_odom_pos()
+    def get_odom_pos(self):
         """ Gets current position based on odometry 
         
         Args:
@@ -52,11 +55,11 @@ class PosEvaluation():
         Returns:
           geometry_msgs/Pose2D current position
         """
-        
+
         
         # Note: Odometry also carries a covariance (uncertainty) matrix... could use this for confidence for odom measurements.
         # Get odometry-based position
-        odom = rospy.wait_for_message(rospy.get_param('odometry_topic', Odometry)
+        odom = rospy.wait_for_message(rospy.get_param('odometry_topic', Odometry))
         # Calculate euler angles from the odometry quaternion
         euler = tf.transformations.euler_from_quaternion(odom.pose.quaternion)
         # Copy x and y from the odometry pose into our Pose2D, along with theta
@@ -67,7 +70,7 @@ class PosEvaluation():
         
         return odom_position
         
-    def get_rgb_pos()
+    def get_rgb_pos(self):
         """ Gets current position based on RGB CNN
         Args:
           None
@@ -78,7 +81,7 @@ class PosEvaluation():
 
         return Pose2D()
         
-    def get_depth_pos()
+    def get_depth_pos(self):
         """ Gets current position based on Depth CNN
         
         Args:
@@ -95,6 +98,6 @@ class PosEvaluation():
 
 if __name__ == "__main__":
     try:
-	    PosEvaluation()
-	except rospy.ROSInterruptException:
-	    pass
+        PosEvaluation()
+    except rospy.ROSInterruptException:
+        pass

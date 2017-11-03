@@ -3,10 +3,12 @@
 # This node calculates the necessary error correction and renames data folders
 #   in order to reclassify data for retraining.
 
-
+import os
 import rospy
 
-import os
+import math
+from geometry_msgs.msg import Pose2D
+from pos_estimator2.srv import CorrectErrors, GetNodes, GetPosition
 
 class ErrorCorrection():
     """ Corrects errors by acquiring the evaluated position, calculating the error, 
@@ -16,14 +18,14 @@ class ErrorCorrection():
         rospy.init_node('error_correction')
         
         # Setup services        
-        self.srv_correct_errors = rospy.Service('correct_errors', CorrectErrors, correct_errors)
+        self.srv_correct_errors = rospy.Service('correct_errors', CorrectErrors, self.correct_errors)
         
         self.srv_get_nodes = rospy.ServiceProxy('get_nodes', GetNodes)
         self.srv_get_position = rospy.ServiceProxy('get_current_position', GetPosition)
         
         self.results_dir = rospy.get_param('data_dir')
         
-    def correct_errors(pos):
+    def correct_errors(self,pos):
         """ ROS service that calculates errors and renames folders based on the given current position 
         
         Args:
@@ -45,7 +47,7 @@ class ErrorCorrection():
         den = 0
         for i in nodes:
             den += math.pow(2, i)
-        distributed_error = [Pose2D]*length(nodes)
+        distributed_error = [Pose2D]*len(nodes)
         for i in nodes:
             distributed_error[i].x = error.x * math.pow(2, i) / den
             distributed_error[i].y = error.y * math.pow(2, i) / den
@@ -58,7 +60,7 @@ class ErrorCorrection():
             new_pos = distributed_error[i]
             pos_old_dir_name = str(old_pos.x) + '-' + str(old_pos.y) + '-' + str(old_pos.theta) 
             # And then rename it to the new name
-            pose_new_dir_name = str(new_pos.x) + '-' + str(new_pos.y) + '-' + str(new_pos.theta) 
+            pos_new_dir_name = str(new_pos.x) + '-' + str(new_pos.y) + '-' + str(new_pos.theta)
             
             os.rename(self.data_dir + pos_old_dir_name, self.data_dir + pos_new_dir_name)
             
@@ -67,6 +69,6 @@ class ErrorCorrection():
 
 if __name__ == "__main__":
     try:
-	    ErrorCorrection()
-	except rospy.ROSInterruptException:
-	    pass
+        ErrorCorrection()
+    except rospy.ROSInterruptException:
+        pass
