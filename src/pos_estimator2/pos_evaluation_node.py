@@ -8,7 +8,7 @@ import rospy
 import tf
 from sensor_msgs.msg import Odometry
 from geometry_msgs.msg import Pose2D
-from pos_estimator2 import
+from pos_estimator2.srv import EstimatePosition
 
 
 
@@ -20,7 +20,7 @@ class PosEvaluation():
         rospy.init_node('pos_evaluation_node')
 
         # Setup service
-        self.srv_evaluate_position = rospy.Service('get_current_position', pos_estimator2.srv.EstimatePosition, get_current_position)
+        self.srv_evaluate_position = rospy.Service('get_current_position', EstimatePosition, get_current_position)
     
     
     @property
@@ -56,8 +56,8 @@ class PosEvaluation():
           geometry_msgs/Pose2D current position
         """
 
-        
-        # Note: Odometry also carries a covariance (uncertainty) matrix... could use this for confidence for odom measurements.
+        # Note: Odometry also carries a covariance (uncertainty) matrix
+        # ... could use this for confidence for odom measurements.
         # Get odometry-based position
         odom = rospy.wait_for_message(rospy.get_param('odometry_topic', Odometry))
         # Calculate euler angles from the odometry quaternion
@@ -91,9 +91,6 @@ class PosEvaluation():
           geometry_msgs/Pose2D current position
         """
         return Pose2D()
-       
-    
-        
 
 
 if __name__ == "__main__":

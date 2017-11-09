@@ -6,11 +6,13 @@
 import os
 import rospy
 
+
 import math
 from geometry_msgs.msg import Pose2D
 from pos_estimator2.srv import CorrectErrors, GetNodes, GetPosition
 
-class ErrorCorrection():
+
+class ErrorCorrection:
     """ Corrects errors by acquiring the evaluated position, calculating the error, 
         and distributing the error over multiple training locations """
         
@@ -37,7 +39,8 @@ class ErrorCorrection():
         
         # Calculate error (if reference is (0,0,0) then error should just be the value of our current position
         error = self.srv_get_position()
-        # Except for theta, which could be different (by a multiple of 90 deg) (but shouldn't, since we always spin to 0)
+        # Except for theta, which can be different (by a multiple of 90 deg)
+        # (but shouldn't, since we always spin to 0)
         
         # Figure out which nodes we're distributing the error over
         nodes = self.srv_get_nodes()
@@ -53,7 +56,6 @@ class ErrorCorrection():
             distributed_error[i].y = error.y * math.pow(2, i) / den
             distributed_error[i].theta = error.theta * math.pow(2, i) / den
         
-        
         for i in nodes:
             # For each node, calculate old folder name
             old_pos = nodes[i]
@@ -62,8 +64,7 @@ class ErrorCorrection():
             # And then rename it to the new name
             pos_new_dir_name = str(new_pos.x) + '-' + str(new_pos.y) + '-' + str(new_pos.theta)
             
-            os.rename(self.data_dir + pos_old_dir_name, self.data_dir + pos_new_dir_name)
-            
+            os.rename(self.results_dir + pos_old_dir_name, self.results_dir + pos_new_dir_name)
         return
 
 
